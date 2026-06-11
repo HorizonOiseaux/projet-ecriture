@@ -1,0 +1,1968 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="day">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Zones Humides — Concours de Textes</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600&family=Source+Serif+4:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet" />
+  <style>
+    /* ===== DESIGN TOKENS ===== */
+    :root {
+      --reed: #5A8A5E;
+      --reed-deep: #2F5233;
+      --reed-pale: #C9DFC8;
+      --algae: #7AB5A2;
+      --algae-pale: #DCF0EA;
+      --rust: #C4764B;
+      --silt: #9B8A78;
+      --dawn: #F0EBE2;
+      --mist: #E8F2EE;
+      --ink: #1A2419;
+      --parchment: #FAF7F2;
+      --water-surface: #A8CCE0;
+      --water-deep: #3A7A9C;
+
+      /* Day mode */
+      --bg: #FAF7F2;
+      --bg-card: #FFFFFF;
+      --bg-section: #F0EBE2;
+      --text-primary: #1A2419;
+      --text-secondary: #4A5E47;
+      --text-muted: #7A8E77;
+      --border: #D6E8D0;
+      --shadow: rgba(42, 70, 44, 0.10);
+      --nav-bg: rgba(250, 247, 242, 0.92);
+      --hero-overlay: rgba(26, 36, 25, 0.45);
+      --ripple: rgba(90, 138, 94, 0.15);
+    }
+
+    [data-theme="night"] {
+      --bg: #0D1A10;
+      --bg-card: #152018;
+      --bg-section: #101D13;
+      --text-primary: #E8F2E6;
+      --text-secondary: #9DC49A;
+      --text-muted: #5A8058;
+      --border: #253D28;
+      --shadow: rgba(0, 0, 0, 0.40);
+      --nav-bg: rgba(13, 26, 16, 0.95);
+      --hero-overlay: rgba(0, 0, 0, 0.60);
+      --ripple: rgba(122, 181, 162, 0.10);
+      --parchment: #152018;
+      --dawn: #101D13;
+      --mist: #0F1E12;
+    }
+
+    /* ===== RESET & BASE ===== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text-primary);
+      transition: background 0.4s ease, color 0.4s ease;
+      overflow-x: hidden;
+    }
+    img { max-width: 100%; display: block; }
+    a { color: inherit; text-decoration: none; }
+
+    /* ===== SCROLLBAR ===== */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--reed); border-radius: 3px; }
+
+    /* ===== AMBIENT BUBBLES (background decoration) ===== */
+    .ambient {
+      position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden;
+    }
+    .bubble {
+      position: absolute;
+      border-radius: 50%;
+      background: radial-gradient(circle, var(--reed-pale), transparent 70%);
+      opacity: 0.18;
+      animation: floatBubble linear infinite;
+    }
+    [data-theme="night"] .bubble { opacity: 0.08; }
+    @keyframes floatBubble {
+      0%   { transform: translateY(0)   scale(1); }
+      50%  { transform: translateY(-30px) scale(1.06); }
+      100% { transform: translateY(0)   scale(1); }
+    }
+
+    /* ===== NAV ===== */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: var(--nav-bg);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 2rem;
+      height: 68px;
+      display: flex; align-items: center; justify-content: space-between;
+      transition: background 0.4s, border-color 0.4s;
+    }
+    .nav-logo {
+      display: flex; align-items: center; gap: 12px;
+    }
+    .nav-logo img {
+      height: 42px; width: auto; object-fit: contain;
+      filter: drop-shadow(0 1px 4px var(--shadow));
+    }
+    .nav-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--reed-deep);
+      line-height: 1.2;
+    }
+    [data-theme="night"] .nav-title { color: var(--reed-pale); }
+    .nav-title small {
+      display: block;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.65rem;
+      font-weight: 400;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+      text-transform: uppercase;
+    }
+    .nav-links {
+      display: flex; align-items: center; gap: 1.8rem; list-style: none;
+    }
+    .nav-links a {
+      font-size: 0.82rem;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      position: relative;
+      transition: color 0.2s;
+    }
+    .nav-links a::after {
+      content: '';
+      position: absolute; bottom: -4px; left: 0; right: 0;
+      height: 1.5px;
+      background: var(--reed);
+      transform: scaleX(0);
+      transition: transform 0.25s ease;
+    }
+    .nav-links a:hover { color: var(--reed); }
+    .nav-links a:hover::after { transform: scaleX(1); }
+    .nav-right { display: flex; align-items: center; gap: 1rem; }
+
+    /* Toggle day/night */
+    .theme-toggle {
+      background: none; border: 1.5px solid var(--border);
+      border-radius: 50px;
+      padding: 6px 14px;
+      cursor: pointer;
+      font-size: 0.78rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      display: flex; align-items: center; gap: 6px;
+      transition: all 0.25s;
+    }
+    .theme-toggle:hover {
+      background: var(--reed-pale);
+      border-color: var(--reed);
+      color: var(--reed-deep);
+    }
+    [data-theme="night"] .theme-toggle:hover {
+      background: var(--bg-section);
+      color: var(--text-primary);
+    }
+
+    /* Participation button */
+    .btn-participate {
+      background: var(--reed);
+      color: #fff;
+      border: none;
+      border-radius: 50px;
+      padding: 8px 20px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      cursor: pointer;
+      text-transform: uppercase;
+      transition: background 0.2s, transform 0.15s;
+    }
+    .btn-participate:hover { background: var(--reed-deep); transform: translateY(-1px); }
+
+    /* ===== PROGRESS BAR ===== */
+    #read-progress {
+      position: fixed; top: 68px; left: 0; z-index: 99;
+      height: 3px;
+      background: linear-gradient(90deg, var(--reed), var(--algae), var(--water-surface));
+      width: 0%;
+      transition: width 0.1s linear;
+    }
+
+    /* ===== HERO ===== */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute; inset: 0; z-index: 0;
+      background:
+        linear-gradient(180deg,
+          rgba(0,0,0,0) 0%,
+          var(--hero-overlay) 60%,
+          rgba(0,0,0,0.75) 100%),
+        url("https://images.unsplash.com/photo-1518709766631-a6a7f45921c3?w=1800&q=80") center/cover no-repeat;
+    }
+    [data-theme="night"] .hero-bg {
+      background:
+        linear-gradient(180deg,
+          rgba(0,0,0,0.2) 0%,
+          rgba(0,0,0,0.70) 60%,
+          rgba(0,0,0,0.88) 100%),
+        url("https://images.unsplash.com/photo-1518709766631-a6a7f45921c3?w=1800&q=80") center/cover no-repeat;
+    }
+    /* Animated water ripples */
+    .water-ripples {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      height: 160px; z-index: 1; overflow: hidden;
+    }
+    .ripple-wave {
+      position: absolute; bottom: 0; left: -50%; right: -50%;
+      height: 100%;
+      background: var(--bg);
+      border-radius: 50% 50% 0 0 / 80% 80% 0 0;
+      opacity: 0.95;
+      animation: waveRise 4s ease-in-out infinite alternate;
+    }
+    .ripple-wave:nth-child(2) {
+      background: var(--mist);
+      opacity: 0.6;
+      animation-duration: 5.5s;
+      animation-delay: -1s;
+      height: 80%;
+    }
+    @keyframes waveRise {
+      0%   { transform: translateY(30px) scaleX(1.02); }
+      100% { transform: translateY(0px)  scaleX(0.99); }
+    }
+    .hero-content {
+      position: relative; z-index: 2;
+      text-align: center;
+      padding: 2rem 1rem;
+      max-width: 820px;
+    }
+    .hero-eyebrow {
+      display: inline-block;
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--algae);
+      border: 1px solid rgba(122,181,162,0.4);
+      border-radius: 50px;
+      padding: 5px 18px;
+      margin-bottom: 1.6rem;
+      backdrop-filter: blur(8px);
+      background: rgba(122,181,162,0.08);
+    }
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.8rem, 7vw, 5.2rem);
+      font-weight: 700;
+      line-height: 1.07;
+      color: #fff;
+      margin-bottom: 1.2rem;
+      text-shadow: 0 2px 24px rgba(0,0,0,0.4);
+    }
+    .hero h1 em {
+      font-style: italic;
+      color: var(--algae);
+    }
+    .hero-sub {
+      font-family: 'Source Serif 4', serif;
+      font-size: clamp(1rem, 2.2vw, 1.25rem);
+      font-weight: 300;
+      font-style: italic;
+      color: rgba(255,255,255,0.82);
+      line-height: 1.7;
+      max-width: 580px;
+      margin: 0 auto 2.4rem;
+    }
+    .hero-stats {
+      display: flex; gap: 2.5rem; justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 2.8rem;
+    }
+    .hero-stat {
+      text-align: center;
+    }
+    .hero-stat strong {
+      display: block;
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--algae);
+    }
+    .hero-stat span {
+      font-size: 0.72rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.6);
+    }
+    .hero-cta {
+      display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;
+    }
+    .btn-primary {
+      background: var(--reed);
+      color: #fff;
+      border: none;
+      border-radius: 50px;
+      padding: 14px 34px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      letter-spacing: 0.04em;
+      transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+      box-shadow: 0 4px 20px rgba(90,138,94,0.35);
+    }
+    .btn-primary:hover {
+      background: var(--reed-deep);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 28px rgba(90,138,94,0.45);
+    }
+    .btn-ghost {
+      background: rgba(255,255,255,0.12);
+      color: #fff;
+      border: 1.5px solid rgba(255,255,255,0.4);
+      border-radius: 50px;
+      padding: 14px 34px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      backdrop-filter: blur(6px);
+      transition: background 0.2s, transform 0.15s;
+    }
+    .btn-ghost:hover { background: rgba(255,255,255,0.22); transform: translateY(-2px); }
+
+    /* ===== SECTIONS ===== */
+    section { position: relative; z-index: 1; }
+    .section-inner {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 5rem 2rem;
+    }
+    .section-label {
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--reed);
+      margin-bottom: 0.8rem;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .section-label::before {
+      content: '';
+      display: inline-block;
+      width: 28px; height: 1.5px;
+      background: var(--reed);
+    }
+    .section-heading {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 700;
+      color: var(--text-primary);
+      line-height: 1.2;
+      margin-bottom: 1.2rem;
+    }
+    .section-intro {
+      font-family: 'Source Serif 4', serif;
+      font-size: 1.05rem;
+      color: var(--text-secondary);
+      line-height: 1.8;
+      max-width: 640px;
+    }
+
+    /* ===== ABOUT ===== */
+    .about-section { background: var(--bg); }
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+    .about-visual {
+      position: relative;
+    }
+    .about-img-wrap {
+      border-radius: 20px;
+      overflow: hidden;
+      aspect-ratio: 4/5;
+      box-shadow: 0 24px 64px var(--shadow);
+    }
+    .about-img-wrap img {
+      width: 100%; height: 100%; object-fit: cover;
+      transition: transform 0.6s ease;
+    }
+    .about-img-wrap:hover img { transform: scale(1.04); }
+    .about-badge {
+      position: absolute;
+      bottom: -20px; right: -20px;
+      background: var(--reed);
+      color: #fff;
+      border-radius: 16px;
+      padding: 16px 22px;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      text-align: center;
+      box-shadow: 0 8px 24px rgba(90,138,94,0.35);
+      line-height: 1.3;
+    }
+    .about-badge small {
+      display: block;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.65rem;
+      font-weight: 400;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      opacity: 0.85;
+      margin-bottom: 4px;
+    }
+    .about-text p {
+      font-family: 'Source Serif 4', serif;
+      font-size: 1rem;
+      line-height: 1.85;
+      color: var(--text-secondary);
+      margin-bottom: 1.2rem;
+    }
+    .about-text p:first-of-type {
+      font-size: 1.12rem;
+      color: var(--text-primary);
+    }
+    .feature-pills {
+      display: flex; gap: 0.6rem; flex-wrap: wrap;
+      margin-top: 2rem;
+    }
+    .pill {
+      background: var(--mist);
+      border: 1px solid var(--reed-pale);
+      color: var(--reed-deep);
+      border-radius: 50px;
+      padding: 6px 16px;
+      font-size: 0.78rem;
+      font-weight: 500;
+    }
+    [data-theme="night"] .pill {
+      background: var(--bg-section);
+      border-color: var(--border);
+      color: var(--text-secondary);
+    }
+
+    /* ===== COUNTDOWN ===== */
+    .countdown-section {
+      background: linear-gradient(135deg, var(--reed-deep) 0%, #1C4220 60%, #0D2A15 100%);
+      overflow: hidden;
+    }
+    [data-theme="night"] .countdown-section {
+      background: linear-gradient(135deg, #0A1A0C 0%, #0D2214 100%);
+    }
+    .countdown-section .section-inner {
+      text-align: center;
+    }
+    .countdown-section .section-label { color: var(--algae); justify-content: center; }
+    .countdown-section .section-label::before { background: var(--algae); }
+    .countdown-section .section-heading { color: #fff; }
+    .countdown-section .section-intro { color: rgba(255,255,255,0.65); margin: 0 auto 3rem; }
+    .countdown-grid {
+      display: flex; gap: 1.5rem; justify-content: center; flex-wrap: wrap;
+    }
+    .countdown-block {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 18px;
+      padding: 2rem 2.4rem;
+      text-align: center;
+      backdrop-filter: blur(6px);
+      min-width: 130px;
+    }
+    .countdown-block .num {
+      font-family: 'Playfair Display', serif;
+      font-size: 3.2rem;
+      font-weight: 700;
+      color: var(--algae);
+      display: block;
+      line-height: 1;
+    }
+    .countdown-block .label {
+      font-size: 0.7rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.5);
+      margin-top: 0.5rem;
+      display: block;
+    }
+
+    /* ===== TEXTS COMPETITION ===== */
+    .texts-section { background: var(--bg); }
+    .texts-filter {
+      display: flex; gap: 0.6rem; flex-wrap: wrap;
+      margin-bottom: 2.5rem;
+    }
+    .filter-btn {
+      background: none;
+      border: 1.5px solid var(--border);
+      border-radius: 50px;
+      padding: 7px 18px;
+      font-size: 0.78rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .filter-btn.active,
+    .filter-btn:hover {
+      background: var(--reed);
+      border-color: var(--reed);
+      color: #fff;
+    }
+    .texts-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 2rem;
+    }
+    /* TEXT CARD */
+    .text-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 4px 20px var(--shadow);
+      transition: transform 0.25s, box-shadow 0.25s;
+      display: flex; flex-direction: column;
+    }
+    .text-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 36px var(--shadow);
+    }
+    .card-header {
+      padding: 1.8rem 1.8rem 0;
+      display: flex; align-items: flex-start; gap: 14px;
+    }
+    .card-avatar {
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--reed-pale), var(--algae-pale));
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--reed-deep);
+    }
+    .card-meta { flex: 1; }
+    .card-author {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+    .card-category {
+      font-size: 0.68rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--reed);
+      font-weight: 500;
+      margin-top: 2px;
+    }
+    .card-likes {
+      display: flex; align-items: center; gap: 5px;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: color 0.2s;
+      background: none; border: none;
+    }
+    .card-likes:hover { color: var(--rust); }
+    .card-likes.liked { color: var(--rust); }
+    .card-body { padding: 1.4rem 1.8rem; flex: 1; }
+    .card-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      line-height: 1.3;
+      margin-bottom: 0.8rem;
+    }
+    .card-excerpt {
+      font-family: 'Source Serif 4', serif;
+      font-size: 0.92rem;
+      line-height: 1.75;
+      color: var(--text-secondary);
+    }
+    .card-full-text {
+      font-family: 'Source Serif 4', serif;
+      font-size: 0.92rem;
+      line-height: 1.75;
+      color: var(--text-secondary);
+      display: none;
+      margin-top: 0.6rem;
+    }
+    .card-footer {
+      padding: 1rem 1.8rem 1.6rem;
+      display: flex; align-items: center; justify-content: space-between;
+      border-top: 1px solid var(--border);
+      margin-top: 0.6rem;
+    }
+    .card-tag {
+      font-size: 0.68rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--algae);
+      background: var(--algae-pale);
+      border-radius: 50px;
+      padding: 3px 10px;
+      font-weight: 600;
+    }
+    [data-theme="night"] .card-tag {
+      background: rgba(122,181,162,0.12);
+    }
+    .read-more-btn {
+      background: none; border: none;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--reed);
+      cursor: pointer;
+      display: flex; align-items: center; gap: 4px;
+      transition: gap 0.2s;
+    }
+    .read-more-btn:hover { gap: 8px; }
+
+    /* ===== FEATURED POEM ===== */
+    .poem-section {
+      background: var(--bg-section);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .poem-inner {
+      max-width: 720px; margin: 0 auto; padding: 5rem 2rem;
+      text-align: center;
+    }
+    .poem-icon {
+      font-size: 2rem; margin-bottom: 1.5rem;
+    }
+    blockquote.featured-poem {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.2rem, 3vw, 1.65rem);
+      font-style: italic;
+      line-height: 1.8;
+      color: var(--text-primary);
+      position: relative;
+      padding: 0 1.5rem;
+    }
+    blockquote.featured-poem::before {
+      content: '"';
+      position: absolute; top: -0.5rem; left: 0;
+      font-size: 4rem;
+      color: var(--reed-pale);
+      line-height: 1;
+    }
+    [data-theme="night"] blockquote.featured-poem::before { color: var(--border); }
+    blockquote.featured-poem p { margin-bottom: 0.6rem; }
+    .poem-credit {
+      margin-top: 1.5rem;
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      letter-spacing: 0.06em;
+    }
+    .poem-credit strong { color: var(--reed); }
+
+    /* ===== JURY / PARTENAIRES ===== */
+    .jury-section { background: var(--bg); }
+    .jury-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 1.5rem;
+      margin-top: 3rem;
+    }
+    .jury-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 1.8rem;
+      text-align: center;
+      box-shadow: 0 2px 12px var(--shadow);
+      transition: transform 0.2s;
+    }
+    .jury-card:hover { transform: translateY(-3px); }
+    .jury-avatar {
+      width: 72px; height: 72px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--reed-pale), var(--algae-pale));
+      margin: 0 auto 1rem;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--reed-deep);
+    }
+    .jury-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 0.3rem;
+    }
+    .jury-role {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    .jury-bio {
+      font-family: 'Source Serif 4', serif;
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      line-height: 1.65;
+      margin-top: 0.8rem;
+    }
+
+    /* ===== TIMELINE ===== */
+    .timeline-section {
+      background: var(--bg-section);
+      border-top: 1px solid var(--border);
+    }
+    .timeline {
+      position: relative;
+      margin-top: 3rem;
+      padding-left: 2rem;
+    }
+    .timeline::before {
+      content: '';
+      position: absolute; left: 0; top: 0; bottom: 0;
+      width: 2px;
+      background: linear-gradient(180deg, var(--reed), var(--algae), var(--water-surface));
+      border-radius: 2px;
+    }
+    .timeline-item {
+      position: relative;
+      padding: 0 0 2.5rem 2rem;
+    }
+    .timeline-item::before {
+      content: '';
+      position: absolute; left: -7px; top: 6px;
+      width: 14px; height: 14px;
+      border-radius: 50%;
+      background: var(--reed);
+      border: 3px solid var(--bg-section);
+      box-shadow: 0 0 0 2px var(--reed);
+    }
+    .timeline-item.done::before { background: var(--algae); box-shadow: 0 0 0 2px var(--algae); }
+    .timeline-item.active::before {
+      background: var(--rust);
+      box-shadow: 0 0 0 2px var(--rust), 0 0 12px rgba(196,118,75,0.4);
+      animation: pulseDot 1.6s ease-in-out infinite;
+    }
+    @keyframes pulseDot {
+      0%, 100% { box-shadow: 0 0 0 2px var(--rust), 0 0 12px rgba(196,118,75,0.4); }
+      50% { box-shadow: 0 0 0 4px var(--rust), 0 0 22px rgba(196,118,75,0.6); }
+    }
+    .timeline-date {
+      font-size: 0.72rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--reed);
+      font-weight: 600;
+      margin-bottom: 0.4rem;
+    }
+    .timeline-item.done .timeline-date { color: var(--algae); }
+    .timeline-item.active .timeline-date { color: var(--rust); }
+    .timeline-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 0.4rem;
+    }
+    .timeline-desc {
+      font-family: 'Source Serif 4', serif;
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      line-height: 1.65;
+      max-width: 540px;
+    }
+
+    /* ===== GALLERY ===== */
+    .gallery-section { background: var(--bg); }
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      grid-template-rows: auto auto;
+      gap: 1rem;
+      margin-top: 3rem;
+    }
+    .gallery-grid .g1 { grid-column: 1 / 3; }
+    .gallery-grid .g2 { grid-column: 3 / 5; }
+    .gallery-grid .g3, .gallery-grid .g4, .gallery-grid .g5, .gallery-grid .g6 { }
+    .gal-item {
+      border-radius: 16px; overflow: hidden;
+      aspect-ratio: 4/3;
+      position: relative;
+      cursor: pointer;
+    }
+    .g1, .g2 { aspect-ratio: 16/9; }
+    .gal-item img {
+      width: 100%; height: 100%; object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+    .gal-item:hover img { transform: scale(1.06); }
+    .gal-caption {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      background: linear-gradient(transparent, rgba(0,0,0,0.65));
+      color: #fff;
+      padding: 1.5rem 1rem 0.8rem;
+      font-size: 0.78rem;
+      font-style: italic;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .gal-item:hover .gal-caption { opacity: 1; }
+
+    /* ===== PARTICIPATE FORM ===== */
+    .form-section {
+      background: linear-gradient(180deg, var(--bg-section) 0%, var(--bg) 100%);
+      border-top: 1px solid var(--border);
+    }
+    .form-wrapper {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 3rem;
+      max-width: 700px;
+      margin: 0 auto;
+      box-shadow: 0 8px 40px var(--shadow);
+    }
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.2rem;
+    }
+    .form-group {
+      margin-bottom: 1.4rem;
+    }
+    .form-group label {
+      display: block;
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 0.5rem;
+    }
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      width: 100%;
+      background: var(--bg);
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      padding: 12px 16px;
+      font-size: 0.92rem;
+      color: var(--text-primary);
+      font-family: 'Source Serif 4', serif;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      outline: none;
+      resize: vertical;
+    }
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
+      border-color: var(--reed);
+      box-shadow: 0 0 0 3px var(--ripple);
+    }
+    .form-group textarea { min-height: 180px; }
+    .form-notice {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-top: 1rem;
+      line-height: 1.6;
+    }
+    .form-notice a { color: var(--reed); text-decoration: underline; }
+    .submit-btn {
+      width: 100%;
+      background: var(--reed);
+      color: #fff;
+      border: none;
+      border-radius: 50px;
+      padding: 16px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      letter-spacing: 0.04em;
+      margin-top: 0.5rem;
+      transition: background 0.2s, transform 0.15s;
+      box-shadow: 0 4px 16px rgba(90,138,94,0.3);
+    }
+    .submit-btn:hover { background: var(--reed-deep); transform: translateY(-2px); }
+
+    /* ===== PARTENAIRES ===== */
+    .partners-section {
+      background: var(--bg-section);
+      border-top: 1px solid var(--border);
+    }
+    .partners-logos {
+      display: flex; gap: 2rem; flex-wrap: wrap; align-items: center;
+      justify-content: center;
+      margin-top: 2.5rem;
+    }
+    .partner-logo {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1rem 2rem;
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      color: var(--text-muted);
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      opacity: 0.7;
+      transition: opacity 0.2s;
+    }
+    .partner-logo:hover { opacity: 1; }
+
+    /* ===== TOAST ===== */
+    #toast {
+      position: fixed; bottom: 2rem; right: 2rem; z-index: 200;
+      background: var(--reed-deep);
+      color: #fff;
+      border-radius: 14px;
+      padding: 14px 22px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      box-shadow: 0 8px 28px rgba(0,0,0,0.25);
+      transform: translateY(80px);
+      opacity: 0;
+      transition: transform 0.3s ease, opacity 0.3s ease;
+      max-width: 280px;
+    }
+    #toast.show { transform: translateY(0); opacity: 1; }
+
+    /* ===== FLOATING NATURE ELEMENTS ===== */
+    .dragonfly {
+      position: fixed;
+      pointer-events: none;
+      z-index: 50;
+      font-size: 1.4rem;
+      animation: dragonFly 18s ease-in-out infinite;
+      opacity: 0.7;
+    }
+    @keyframes dragonFly {
+      0%   { transform: translate(0,0) rotate(-10deg); }
+      25%  { transform: translate(120px,-60px) rotate(5deg); }
+      50%  { transform: translate(60px,30px) rotate(-5deg); }
+      75%  { transform: translate(-40px,-20px) rotate(8deg); }
+      100% { transform: translate(0,0) rotate(-10deg); }
+    }
+
+    /* ===== FOOTER ===== */
+    footer {
+      background: var(--ink);
+      color: rgba(255,255,255,0.75);
+      padding: 4rem 2rem 2rem;
+      position: relative; z-index: 1;
+    }
+    [data-theme="night"] footer { background: #060F07; }
+    .footer-inner {
+      max-width: 1120px; margin: 0 auto;
+    }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1.8fr 1fr 1fr 1fr;
+      gap: 3rem;
+      margin-bottom: 3rem;
+    }
+    .footer-brand img {
+      height: 48px; width: auto; margin-bottom: 1rem;
+      opacity: 0.9;
+    }
+    .footer-brand p {
+      font-family: 'Source Serif 4', serif;
+      font-size: 0.88rem;
+      line-height: 1.7;
+      color: rgba(255,255,255,0.55);
+      margin-bottom: 1.2rem;
+    }
+    .footer-social {
+      display: flex; gap: 0.8rem;
+    }
+    .social-btn {
+      width: 36px; height: 36px;
+      border-radius: 8px;
+      background: rgba(255,255,255,0.08);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.95rem;
+      transition: background 0.2s;
+      cursor: pointer;
+    }
+    .social-btn:hover { background: var(--reed); }
+    .footer-col h4 {
+      font-family: 'Playfair Display', serif;
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: rgba(255,255,255,0.9);
+      margin-bottom: 1rem;
+    }
+    .footer-col ul { list-style: none; }
+    .footer-col ul li { margin-bottom: 0.55rem; }
+    .footer-col ul li a {
+      font-size: 0.82rem;
+      color: rgba(255,255,255,0.5);
+      transition: color 0.2s;
+    }
+    .footer-col ul li a:hover { color: var(--algae); }
+    .footer-divider {
+      border: none;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      margin-bottom: 1.8rem;
+    }
+    .footer-bottom {
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 1rem;
+    }
+    .footer-bottom p {
+      font-size: 0.75rem;
+      color: rgba(255,255,255,0.35);
+    }
+    .footer-bottom p a { color: var(--algae); }
+    .footer-bottom p strong { color: rgba(255,255,255,0.55); }
+    /* Editable footer name */
+    .footer-org-name {
+      font-size: 0.82rem;
+      color: rgba(255,255,255,0.6);
+      letter-spacing: 0.04em;
+    }
+    .footer-edition {
+      display: inline-block;
+      background: rgba(122,181,162,0.12);
+      border: 1px solid rgba(122,181,162,0.25);
+      border-radius: 50px;
+      padding: 4px 14px;
+      font-size: 0.7rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--algae);
+    }
+
+    /* ===== MOBILE NAV TOGGLE ===== */
+    .nav-hamburger {
+      display: none;
+      background: none; border: none;
+      font-size: 1.4rem;
+      cursor: pointer;
+      color: var(--text-primary);
+    }
+
+    /* ===== SCROLL REVEAL ===== */
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.65s ease, transform 0.65s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 900px) {
+      .about-grid { grid-template-columns: 1fr; }
+      .about-badge { bottom: 10px; right: 10px; }
+      .gallery-grid { grid-template-columns: 1fr 1fr; }
+      .gallery-grid .g1, .gallery-grid .g2 { grid-column: span 2; }
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 680px) {
+      .nav-links { display: none; }
+      .nav-hamburger { display: block; }
+      .hero h1 { font-size: 2.4rem; }
+      .form-row { grid-template-columns: 1fr; }
+      .gallery-grid { grid-template-columns: 1fr; }
+      .gallery-grid .g1, .gallery-grid .g2 { grid-column: 1; }
+      .footer-grid { grid-template-columns: 1fr; gap: 2rem; }
+      .footer-bottom { flex-direction: column; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Ambient background bubbles -->
+<div class="ambient" aria-hidden="true">
+  <div class="bubble" style="width:320px;height:320px;top:10%;left:5%;animation-duration:12s;"></div>
+  <div class="bubble" style="width:200px;height:200px;top:40%;right:8%;animation-duration:9s;animation-delay:-3s;background:radial-gradient(circle,var(--algae-pale),transparent 70%)"></div>
+  <div class="bubble" style="width:140px;height:140px;top:70%;left:15%;animation-duration:14s;animation-delay:-6s;"></div>
+</div>
+
+<!-- Dragonfly decoration -->
+<div class="dragonfly" style="top:18%;left:82%" aria-hidden="true">🦟</div>
+
+<!-- Progress bar -->
+<div id="read-progress" role="progressbar" aria-hidden="true"></div>
+
+<!-- Toast notification -->
+<div id="toast" role="alert" aria-live="polite"></div>
+
+<!-- ===== NAV ===== -->
+<nav role="navigation" aria-label="Navigation principale">
+  <div class="nav-logo">
+    <!-- 🔧 PERSONNALISABLE : remplacez le src par votre propre logo -->
+    <img src="http://www.image-heberg.fr/files/1776272565489044477.png"
+         alt="Logo du concours" onerror="this.style.display='none'" />
+    <div class="nav-title">
+      <!-- 🔧 PERSONNALISABLE : nom du concours -->
+      Zones Humides
+      <small>Concours de Textes 2025</small>
+    </div>
+  </div>
+  <ul class="nav-links">
+    <li><a href="#presentation">À propos</a></li>
+    <li><a href="#textes">Textes</a></li>
+    <li><a href="#calendrier">Calendrier</a></li>
+    <li><a href="#galerie">Galerie</a></li>
+    <li><a href="#participer">Participer</a></li>
+  </ul>
+  <div class="nav-right">
+    <button class="theme-toggle" onclick="toggleTheme()" aria-label="Basculer mode jour/nuit">
+      <span class="theme-icon">🌙</span>
+      <span class="theme-label">Nuit</span>
+    </button>
+    <a href="#participer"><button class="btn-participate" aria-label="Soumettre un texte">Soumettre</button></a>
+  </div>
+  <button class="nav-hamburger" onclick="toggleMobileMenu()" aria-label="Ouvrir le menu">☰</button>
+</nav>
+
+<!-- ===== HERO ===== -->
+<section class="hero" role="banner">
+  <div class="hero-bg" aria-hidden="true"></div>
+  <div class="hero-content reveal">
+    <!-- 🔧 PERSONNALISABLE : bandeau thématique -->
+    <div class="hero-eyebrow">✦ Concours National · Édition 2025 ✦</div>
+    <h1>Les <em>Voix</em> des<br>Zones Humides</h1>
+    <p class="hero-sub">
+      <!-- 🔧 PERSONNALISABLE : sous-titre hero -->
+      Un concours d'écriture pour célébrer tourbières, marais, étangs et mangroves —
+      ces espaces vivants qui murmurent entre deux mondes.
+    </p>
+    <div class="hero-stats">
+      <!-- 🔧 PERSONNALISABLE : chiffres clés -->
+      <div class="hero-stat"><strong>3</strong><span>Catégories</span></div>
+      <div class="hero-stat"><strong>24</strong><span>Textes reçus</span></div>
+      <div class="hero-stat"><strong>1er<br>mars</strong><span>Date limite</span></div>
+      <div class="hero-stat"><strong>3</strong><span>Prix décernés</span></div>
+    </div>
+    <div class="hero-cta">
+      <a href="#textes"><button class="btn-primary">Lire les textes</button></a>
+      <a href="#participer"><button class="btn-ghost">Participer →</button></a>
+    </div>
+  </div>
+  <div class="water-ripples" aria-hidden="true">
+    <div class="ripple-wave"></div>
+    <div class="ripple-wave"></div>
+  </div>
+</section>
+
+<!-- ===== COUNTDOWN ===== -->
+<section class="countdown-section" id="countdown-section">
+  <div class="section-inner">
+    <div class="section-label">Compte à rebours</div>
+    <!-- 🔧 PERSONNALISABLE : titre et date limite -->
+    <h2 class="section-heading reveal">Il reste encore du temps</h2>
+    <p class="section-intro reveal">
+      La date limite de soumission est fixée au <strong>1er mars 2025</strong>.
+      Ne laissez pas vos mots dormir dans un tiroir.
+    </p>
+    <div class="countdown-grid">
+      <div class="countdown-block reveal">
+        <span class="num" id="cd-days">--</span>
+        <span class="label">Jours</span>
+      </div>
+      <div class="countdown-block reveal">
+        <span class="num" id="cd-hours">--</span>
+        <span class="label">Heures</span>
+      </div>
+      <div class="countdown-block reveal">
+        <span class="num" id="cd-mins">--</span>
+        <span class="label">Minutes</span>
+      </div>
+      <div class="countdown-block reveal">
+        <span class="num" id="cd-secs">--</span>
+        <span class="label">Secondes</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== ABOUT ===== -->
+<section class="about-section section-inner" id="presentation">
+  <div class="about-grid">
+    <div class="about-visual reveal">
+      <div class="about-img-wrap">
+        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&q=75"
+             alt="Marais au lever du soleil" loading="lazy" />
+      </div>
+      <!-- 🔧 PERSONNALISABLE : badge chiffre accrocheur -->
+      <div class="about-badge">
+        <small>Depuis</small>
+        2018
+      </div>
+    </div>
+    <div class="about-text">
+      <div class="section-label">Le Concours</div>
+      <!-- 🔧 PERSONNALISABLE : titre section -->
+      <h2 class="section-heading reveal">Écrire pour les terres d'entre-deux</h2>
+      <!-- 🔧 PERSONNALISABLE : texte de présentation -->
+      <p class="reveal">
+        Les zones humides couvrent à peine 6 % de la surface terrestre, mais abritent plus d'un tiers
+        de toutes les espèces connues. Ce concours d'écriture invite poètes, nouvellistes et essayistes
+        à plonger dans ces écosystèmes fragiles et extraordinaires.
+      </p>
+      <p class="reveal">
+        Lancé en 2018 à l'occasion de la Journée Mondiale des Zones Humides, notre concours rassemble
+        chaque année des voix nouvelles et confirmées autour d'un même impératif : <em>faire entendre
+        ce que la nature ne peut pas dire seule</em>.
+      </p>
+      <p class="reveal">
+        Les textes sélectionnés sont présentés ici, lus lors d'une soirée de remise des prix,
+        puis publiés dans notre revue annuelle. Cette édition 2025 est placée sous le signe
+        de la <strong>résilience</strong>.
+      </p>
+      <!-- 🔧 PERSONNALISABLE : mots-clés thématiques -->
+      <div class="feature-pills reveal">
+        <span class="pill">🌿 Poésie</span>
+        <span class="pill">📖 Nouvelle</span>
+        <span class="pill">✍️ Essai</span>
+        <span class="pill">🌊 Marais</span>
+        <span class="pill">🦢 Tourbières</span>
+        <span class="pill">🌱 Résilience</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== TEXTS COMPETITION ===== -->
+<section id="textes" style="background:var(--bg-section);border-top:1px solid var(--border);">
+  <div class="section-inner">
+    <div class="section-label">Les Textes</div>
+    <h2 class="section-heading reveal">Œuvres en compétition</h2>
+    <p class="section-intro reveal">
+      Vingt-quatre textes ont été retenus par le comité de lecture pour cette édition 2025.
+      Parcourez les œuvres, lisez, et votez pour votre coup de cœur.
+    </p>
+
+    <!-- Filter buttons -->
+    <div class="texts-filter reveal" role="group" aria-label="Filtrer par catégorie">
+      <button class="filter-btn active" onclick="filterTexts('all', this)">Tous</button>
+      <button class="filter-btn" onclick="filterTexts('poesie', this)">Poésie</button>
+      <button class="filter-btn" onclick="filterTexts('nouvelle', this)">Nouvelle</button>
+      <button class="filter-btn" onclick="filterTexts('essai', this)">Essai</button>
+    </div>
+
+    <div class="texts-grid" id="texts-grid">
+
+      <!-- ===== CARD 1 ===== -->
+      <!-- 🔧 PERSONNALISABLE : tous les champs des cartes textes -->
+      <article class="text-card reveal" data-cat="poesie">
+        <div class="card-header">
+          <div class="card-avatar">M</div>
+          <div class="card-meta">
+            <div class="card-author">Marie Fontaine</div>
+            <div class="card-category">Poésie · 14 ans</div>
+          </div>
+          <button class="card-likes" onclick="toggleLike(this)" aria-label="Aimer ce texte">
+            ♡ <span>47</span>
+          </button>
+        </div>
+        <div class="card-body">
+          <h3 class="card-title">Le Héron de la Mare aux Joncs</h3>
+          <p class="card-excerpt">
+            Il attend, immobile comme une idée fixe,
+            les pattes dans la vase ancienne du monde.
+            Il n'est pas gris — il est l'eau avant l'eau,
+            le silence tendu entre deux roseaux…
+          </p>
+          <p class="card-full-text">
+            Il attend, immobile comme une idée fixe,
+            les pattes dans la vase ancienne du monde.
+            Il n'est pas gris — il est l'eau avant l'eau,
+            le silence tendu entre deux roseaux.
+            <br><br>
+            Une grenouille plonge, et c'est tout l'étang
+            qui frissonne jusqu'aux nénuphars du bord.
+            Lui ne bouge pas. Il sait que la patience
+            est la seule forme d'intelligence du monde.
+          </p>
+        </div>
+        <div class="card-footer">
+          <span class="card-tag">Lauréat potentiel</span>
+          <button class="read-more-btn" onclick="toggleCard(this)" aria-expanded="false">
+            Lire la suite →
+          </button>
+        </div>
+      </article>
+
+      <!-- ===== CARD 2 ===== -->
+      <article class="text-card reveal" data-cat="nouvelle">
+        <div class="card-header">
+          <div class="card-avatar">T</div>
+          <div class="card-meta">
+            <div class="card-author">Thomas Brasseur</div>
+            <div class="card-category">Nouvelle · 17 ans</div>
+          </div>
+          <button class="card-likes" onclick="toggleLike(this)" aria-label="Aimer ce texte">
+            ♡ <span>31</span>
+          </button>
+        </div>
+        <div class="card-body">
+          <h3 class="card-title">La Tourbière de Grand-Mère</h3>
+          <p class="card-excerpt">
+            Grand-mère disait que la tourbière nous gardait en mémoire.
+            Chaque botte enfoncée dans la sphaigne laisse une empreinte
+            que le marais finit par avaler, siècle après siècle.
+            « Nous ne disparaissons pas, disait-elle, nous devenons tourbe. »
+          </p>
+          <p class="card-full-text">
+            Grand-mère disait que la tourbière nous gardait en mémoire.
+            Chaque botte enfoncée dans la sphaigne laisse une empreinte
+            que le marais finit par avaler, siècle après siècle.
+            « Nous ne disparaissons pas, disait-elle, nous devenons tourbe. »
+            <br><br>
+            Je me souviens de ses mains, petites et tenaces comme des mousses,
+            qui prélevaient quelques grammes de terre noire pour en humer le parfum.
+            Une odeur de temps long, de forêts englouties, de rois sans sépultures.
+            Ce matin-là, j'ai compris qu'elle ne mourait pas.
+            Elle rejoignait simplement le récit du marais.
+          </p>
+        </div>
+        <div class="card-footer">
+          <span class="card-tag">Sélectionné</span>
+          <button class="read-more-btn" onclick="toggleCard(this)" aria-expanded="false">
+            Lire la suite →
+          </button>
+        </div>
+      </article>
+
+      <!-- ===== CARD 3 ===== -->
+      <article class="text-card reveal" data-cat="essai">
+        <div class="card-header">
+          <div class="card-avatar">S</div>
+          <div class="card-meta">
+            <div class="card-author">Sofia Nagler</div>
+            <div class="card-category">Essai · 16 ans</div>
+          </div>
+          <button class="card-likes" onclick="toggleLike(this)" aria-label="Aimer ce texte">
+            ♡ <span>58</span>
+          </button>
+        </div>
+        <div class="card-body">
+          <h3 class="card-title">Quand les marais parlent, personne n'écoute</h3>
+          <p class="card-excerpt">
+            En 1900, la France comptait plus de 12 millions d'hectares de zones humides.
+            Aujourd'hui, il en reste moins de la moitié. Ces chiffres ne font pas la une
+            des journaux, mais ils racontent une extinction silencieuse, méthodique,
+            presque administrative dans sa banalité…
+          </p>
+          <p class="card-full-text">
+            En 1900, la France comptait plus de 12 millions d'hectares de zones humides.
+            Aujourd'hui, il en reste moins de la moitié. Ces chiffres ne font pas la une
+            des journaux, mais ils racontent une extinction silencieuse, méthodique,
+            presque administrative dans sa banalité.
+            <br><br>
+            Drainés pour l'agriculture, comblés pour la construction, asséchés par les caprices
+            du marché foncier — les marais disparaissent sans coups de feu ni discours.
+            Ce que nous perdons n'est pas seulement un écosystème, mais un lexique entier :
+            les mots pour nommer la vase, la roselière, la vasière s'effacent en même temps
+            que les lieux qu'ils désignaient.
+          </p>
+        </div>
+        <div class="card-footer">
+          <span class="card-tag">Coup de cœur jury</span>
+          <button class="read-more-btn" onclick="toggleCard(this)" aria-expanded="false">
+            Lire la suite →
+          </button>
+        </div>
+      </article>
+
+      <!-- ===== CARD 4 ===== -->
+      <article class="text-card reveal" data-cat="poesie">
+        <div class="card-header">
+          <div class="card-avatar">L</div>
+          <div class="card-meta">
+            <div class="card-author">Léo Vasquez</div>
+            <div class="card-category">Poésie · 15 ans</div>
+          </div>
+          <button class="card-likes" onclick="toggleLike(this)" aria-label="Aimer ce texte">
+            ♡ <span>22</span>
+          </button>
+        </div>
+        <div class="card-body">
+          <h3 class="card-title">Grenouilles, minuit</h3>
+          <p class="card-excerpt">
+            Elles chantent avec leur ventre plein d'eau —
+            chorale des profondeurs sans chef d'orchestre,
+            syncopée, joyeuse, anarchiste.
+            Le silence entre deux coassements est aussi une note…
+          </p>
+          <p class="card-full-text">
+            Elles chantent avec leur ventre plein d'eau —
+            chorale des profondeurs sans chef d'orchestre,
+            syncopée, joyeuse, anarchiste.
+            Le silence entre deux coassements est aussi une note.
+            <br><br>
+            Nous, nous dormons fenêtre ouverte
+            et laissons entrer leur opéra saisonnier,
+            convaincu depuis l'enfance
+            que la nuit a besoin de cette musique verte
+            pour tenir jusqu'à l'aube.
+          </p>
+        </div>
+        <div class="card-footer">
+          <span class="card-tag">Sélectionné</span>
+          <button class="read-more-btn" onclick="toggleCard(this)" aria-expanded="false">
+            Lire la suite →
+          </button>
+        </div>
+      </article>
+
+      <!-- ===== CARD 5 ===== -->
+      <article class="text-card reveal" data-cat="nouvelle">
+        <div class="card-header">
+          <div class="card-avatar">A</div>
+          <div class="card-meta">
+            <div class="card-author">Amira Ben Soltane</div>
+            <div class="card-category">Nouvelle · 18 ans</div>
+          </div>
+          <button class="card-likes" onclick="toggleLike(this)" aria-label="Aimer ce texte">
+            ♡ <span>44</span>
+          </button>
+        </div>
+        <div class="card-body">
+          <h3 class="card-title">L'Embouchure</h3>
+          <p class="card-excerpt">
+            Là où la rivière hésite avant de mourir dans la mer,
+            il y a un bras de vase et de sel que tout le monde évite.
+            Sauf Djamel. Sauf moi. Sauf les flamants roses
+            qui ne semblent appartenir à aucun pays précis…
+          </p>
+          <p class="card-full-text">
+            Là où la rivière hésite avant de mourir dans la mer,
+            il y a un bras de vase et de sel que tout le monde évite.
+            Sauf Djamel. Sauf moi. Sauf les flamants roses
+            qui ne semblent appartenir à aucun pays précis.
+            <br><br>
+            Cet été-là, nous avions treize ans et une seule paire de bottes entre nous.
+            On se les passait selon un protocole de justice absurde et tacite —
+            celui qui voulait le plus s'approcer portait les bottes,
+            l'autre pataugeait, et on échangeait après trente pas.
+            Le marais nous apprenait le partage sans rien nous demander en échange.
+          </p>
+        </div>
+        <div class="card-footer">
+          <span class="card-tag">Lauréat potentiel</span>
+          <button class="read-more-btn" onclick="toggleCard(this)" aria-expanded="false">
+            Lire la suite →
+          </button>
+        </div>
+      </article>
+
+      <!-- ===== CARD 6 ===== -->
+      <article class="text-card reveal" data-cat="essai">
+        <div class="card-header">
+          <div class="card-avatar">R</div>
+          <div class="card-meta">
+            <div class="card-author">Robin Cauchard</div>
+            <div class="card-category">Essai · 17 ans</div>
+          </div>
+          <button class="card-likes" onclick="toggleLike(this)" aria-label="Aimer ce texte">
+            ♡ <span>19</span>
+          </button>
+        </div>
+        <div class="card-body">
+          <h3 class="card-title">L'Eau qui reste</h3>
+          <p class="card-excerpt">
+            Face au dérèglement climatique, on parle de barrages, de retenues,
+            de dessalement à grande échelle. On oublie que la nature a inventé
+            les zones humides pour stocker l'eau bien avant nous —
+            et que nous les détruisons plus vite que nos ingénieurs ne construisent…
+          </p>
+          <p class="card-full-text">
+            Face au dérèglement climatique, on parle de barrages, de retenues,
+            de dessalement à grande échelle. On oublie que la nature a inventé
+            les zones humides pour stocker l'eau bien avant nous —
+            et que nous les détruisons plus vite que nos ingénieurs ne construisent.
+            <br><br>
+            Une hectare de prairie inondable peut absorber jusqu'à un million de litres d'eau
+            lors d'une crue. Un million de litres qui ne détruisent pas une cave,
+            n'emportent pas une voiture, n'inondent pas un sous-sol.
+            La prochaine fois que vous verrez un marais, pensez à lui comme
+            à une infrastructure publique — la plus ancienne, la plus efficace, la moins chère.
+          </p>
+        </div>
+        <div class="card-footer">
+          <span class="card-tag">Sélectionné</span>
+          <button class="read-more-btn" onclick="toggleCard(this)" aria-expanded="false">
+            Lire la suite →
+          </button>
+        </div>
+      </article>
+
+    </div><!-- /texts-grid -->
+  </div>
+</section>
+
+<!-- ===== FEATURED POEM ===== -->
+<section class="poem-section">
+  <div class="poem-inner">
+    <div class="poem-icon">🌿</div>
+    <!-- 🔧 PERSONNALISABLE : poème ou extrait mis en avant -->
+    <blockquote class="featured-poem reveal">
+      <p>Les zones humides ne sont pas des terres perdues,</p>
+      <p>ni des espaces sans nom entre deux endroits.</p>
+      <p>Ce sont les poumons du monde qui respirent sous nos pieds,</p>
+      <p>la mémoire longue de la pluie et des saisons.</p>
+    </blockquote>
+    <!-- 🔧 PERSONNALISABLE : auteur de la citation -->
+    <div class="poem-credit reveal">
+      — <strong>Juliette Moreau</strong>, Grand Prix 2024 · catégorie Poésie
+    </div>
+  </div>
+</section>
+
+<!-- ===== JURY ===== -->
+<section class="jury-section" id="jury">
+  <div class="section-inner">
+    <div class="section-label">Le Jury</div>
+    <!-- 🔧 PERSONNALISABLE : titre et intro jury -->
+    <h2 class="section-heading reveal">Celles et ceux qui liront</h2>
+    <p class="section-intro reveal">
+      Notre jury réunit des écrivains, des scientifiques et des défenseurs de l'environnement
+      unis par leur amour du vivant et de la langue.
+    </p>
+    <div class="jury-grid">
+      <!-- 🔧 PERSONNALISABLE : membres du jury -->
+      <div class="jury-card reveal">
+        <div class="jury-avatar">CL</div>
+        <div class="jury-name">Claire Lemaire</div>
+        <div class="jury-role">Présidente · Romancière</div>
+        <p class="jury-bio">Auteure de <em>La Saison des vases</em> (Gallimard, 2022), lauréate du Prix de l'Eau.</p>
+      </div>
+      <div class="jury-card reveal">
+        <div class="jury-avatar">PD</div>
+        <div class="jury-name">Prof. David Saenz</div>
+        <div class="jury-role">Écologue · CNRS</div>
+        <p class="jury-bio">Spécialiste des tourbières boréales, auteur de plus de 80 publications scientifiques.</p>
+      </div>
+      <div class="jury-card reveal">
+        <div class="jury-avatar">NR</div>
+        <div class="jury-name">Nadia Roussel</div>
+        <div class="jury-role">Poète · Professeure</div>
+        <p class="jury-bio">Enseigne la littérature à l'Université de Rennes, cofondatrice de la revue <em>Terres Vives</em>.</p>
+      </div>
+      <div class="jury-card reveal">
+        <div class="jury-avatar">KT</div>
+        <div class="jury-name">Kwame Tetteh</div>
+        <div class="jury-role">Journaliste · Environnement</div>
+        <p class="jury-bio">Chroniqueur au Monde sur les crises écologiques, lauréat du Prix Albert Londres 2021.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== TIMELINE ===== -->
+<section class="timeline-section" id="calendrier">
+  <div class="section-inner">
+    <div class="section-label">Calendrier</div>
+    <!-- 🔧 PERSONNALISABLE : titre et dates -->
+    <h2 class="section-heading reveal">Les grandes étapes</h2>
+    <p class="section-intro reveal">
+      De l'appel à textes jusqu'à la soirée de remise des prix, voici le fil du temps.
+    </p>
+    <div class="timeline">
+      <!-- 🔧 PERSONNALISABLE : étapes du calendrier -->
+      <div class="timeline-item done reveal">
+        <div class="timeline-date">Octobre 2024</div>
+        <div class="timeline-title">Lancement de l'édition 2025</div>
+        <p class="timeline-desc">Publication du règlement et ouverture des inscriptions en ligne. La thématique « Résilience » est annoncée lors d'une conférence à Bordeaux.</p>
+      </div>
+      <div class="timeline-item done reveal">
+        <div class="timeline-date">Décembre 2024</div>
+        <div class="timeline-title">Ateliers d'écriture</div>
+        <p class="timeline-desc">Sessions animées par les membres du jury dans dix lycées partenaires. Plus de 300 jeunes accompagnés.</p>
+      </div>
+      <div class="timeline-item active reveal">
+        <div class="timeline-date">Maintenant · Janvier 2025</div>
+        <div class="timeline-title">Période de soumission ouverte</div>
+        <p class="timeline-desc">Envoyez vos textes via le formulaire ci-dessous. Toutes les catégories (poésie, nouvelle, essai) sont acceptées jusqu'au 1er mars 2025.</p>
+      </div>
+      <div class="timeline-item reveal">
+        <div class="timeline-date">Février–Mars 2025</div>
+        <div class="timeline-title">Lecture par le comité</div>
+        <p class="timeline-desc">Chaque texte est lu à l'aveugle par au moins deux membres du jury. Les finalistes sont contactés individuellement.</p>
+      </div>
+      <div class="timeline-item reveal">
+        <div class="timeline-date">Avril 2025</div>
+        <div class="timeline-title">Publication des textes sélectionnés</div>
+        <p class="timeline-desc">Les œuvres retenues sont publiées sur cette plateforme et dans la revue papier distribuée aux partenaires.</p>
+      </div>
+      <div class="timeline-item reveal">
+        <div class="timeline-date">2 février 2025</div>
+        <div class="timeline-title">Soirée de remise des prix</div>
+        <p class="timeline-desc">Cérémonie publique à l'occasion de la Journée Mondiale des Zones Humides. Lecture des textes primés. Entrée libre.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== GALLERY ===== -->
+<section class="gallery-section" id="galerie">
+  <div class="section-inner">
+    <div class="section-label">Galerie</div>
+    <!-- 🔧 PERSONNALISABLE : titre galerie -->
+    <h2 class="section-heading reveal">Les visages des zones humides</h2>
+    <p class="section-intro reveal">
+      Photos prises lors de sorties terrain organisées avec les participants des éditions précédentes.
+    </p>
+    <div class="gallery-grid reveal">
+      <div class="gal-item g1">
+        <img src="https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=900&q=75" alt="Marais au lever du soleil" loading="lazy" />
+        <div class="gal-caption">Marais de la Brière, Loire-Atlantique</div>
+      </div>
+      <div class="gal-item g2">
+        <img src="https://images.unsplash.com/photo-1610638434945-1e0bc8b54b18?w=900&q=75" alt="Nénuphars" loading="lazy" />
+        <div class="gal-caption">Tourbière de la Dombes, Ain</div>
+      </div>
+      <div class="gal-item g3">
+        <img src="https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=600&q=75" alt="Lac" loading="lazy" />
+        <div class="gal-caption">Lac de Lacanau</div>
+      </div>
+      <div class="gal-item g4">
+        <img src="https://images.unsplash.com/photo-1508739773434-c26b3d09e071?w=600&q=75" alt="Rivière" loading="lazy" />
+        <div class="gal-caption">Marais Poitevin</div>
+      </div>
+      <div class="gal-item g5">
+        <img src="https://images.unsplash.com/photo-1501854140801-50d01698950b?w=600&q=75" alt="Forêt humide" loading="lazy" />
+        <div class="gal-caption">Forêt alluviale, Alsace</div>
+      </div>
+      <div class="gal-item g6">
+        <img src="https://images.unsplash.com/photo-1542223616-9de9adb5e3e8?w=600&q=75" alt="Flamants roses" loading="lazy" />
+        <div class="gal-caption">Camargue, Bouches-du-Rhône</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== PARTICIPATE FORM ===== -->
+<section class="form-section" id="participer">
+  <div class="section-inner">
+    <div class="section-label">Participer</div>
+    <h2 class="section-heading reveal">Soumettez votre texte</h2>
+    <p class="section-intro reveal" style="margin-bottom:3rem;">
+      Remplissez le formulaire ci-dessous. Tous les textes sont les bienvenus,
+      quelle que soit votre expérience d'écriture.
+    </p>
+    <div class="form-wrapper reveal">
+      <div class="form-row">
+        <!-- 🔧 PERSONNALISABLE : champs du formulaire -->
+        <div class="form-group">
+          <label for="f-prenom">Prénom</label>
+          <input type="text" id="f-prenom" placeholder="Votre prénom" />
+        </div>
+        <div class="form-group">
+          <label for="f-nom">Nom</label>
+          <input type="text" id="f-nom" placeholder="Votre nom" />
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="f-email">Adresse e-mail</label>
+          <input type="email" id="f-email" placeholder="vous@exemple.fr" />
+        </div>
+        <div class="form-group">
+          <label for="f-age">Âge</label>
+          <input type="number" id="f-age" placeholder="Ex : 15" min="8" max="100" />
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="f-cat">Catégorie</label>
+        <select id="f-cat">
+          <option value="">— Choisissez une catégorie —</option>
+          <option value="poesie">Poésie</option>
+          <option value="nouvelle">Nouvelle</option>
+          <option value="essai">Essai</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="f-titre">Titre de l'œuvre</label>
+        <input type="text" id="f-titre" placeholder="Le titre de votre texte" />
+      </div>
+      <div class="form-group">
+        <label for="f-texte">Votre texte</label>
+        <textarea id="f-texte" placeholder="Collez ou rédigez votre texte ici. Maximum 3 000 mots."></textarea>
+      </div>
+      <button class="submit-btn" onclick="submitForm()">
+        Envoyer ma participation ✦
+      </button>
+      <!-- 🔧 PERSONNALISABLE : mentions légales -->
+      <p class="form-notice">
+        En soumettant ce texte, vous acceptez notre
+        <a href="#">règlement du concours</a>
+        et autorisez la publication de votre œuvre sur cette plateforme et dans la revue annuelle.
+        Vos données ne sont pas partagées avec des tiers.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== PARTNERS ===== -->
+<section class="partners-section">
+  <div class="section-inner" style="padding:3rem 2rem;">
+    <div class="section-label" style="justify-content:center;margin-bottom:0.5rem;">Partenaires</div>
+    <!-- 🔧 PERSONNALISABLE : logos partenaires -->
+    <div class="partners-logos">
+      <div class="partner-logo">Ministère de l'Écologie</div>
+      <div class="partner-logo">Région Bretagne</div>
+      <div class="partner-logo">Tour du Valat</div>
+      <div class="partner-logo">Ramsar France</div>
+      <div class="partner-logo">Fondation pour la Nature</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer id="footer" role="contentinfo">
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <!-- Brand column -->
+      <div class="footer-brand">
+        <!-- 🔧 PERSONNALISABLE : logo footer -->
+        <img src="http://www.image-heberg.fr/files/1776272565489044477.png"
+             alt="Logo" onerror="this.style.display='none'" />
+        <!-- 🔧 PERSONNALISABLE : description footer -->
+        <p>
+          Un concours d'écriture qui donne une voix aux zones humides de France et du monde.
+          Parce que les mots, eux aussi, peuvent être des habitats.
+        </p>
+        <div class="footer-social">
+          <!-- 🔧 PERSONNALISABLE : liens réseaux sociaux -->
+          <a href="#" class="social-btn" aria-label="Facebook" title="Facebook">𝔽</a>
+          <a href="#" class="social-btn" aria-label="Instagram" title="Instagram">📷</a>
+          <a href="#" class="social-btn" aria-label="Twitter/X" title="Twitter">𝕏</a>
+          <a href="#" class="social-btn" aria-label="YouTube" title="YouTube">▶</a>
+        </div>
+      </div>
+
+      <!-- Links column 1 -->
+      <div class="footer-col">
+        <!-- 🔧 PERSONNALISABLE : liens de navigation footer -->
+        <h4>Le Concours</h4>
+        <ul>
+          <li><a href="#presentation">Présentation</a></li>
+          <li><a href="#textes">Textes en compétition</a></li>
+          <li><a href="#jury">Le jury</a></li>
+          <li><a href="#calendrier">Calendrier</a></li>
+          <li><a href="#participer">Participer</a></li>
+        </ul>
+      </div>
+
+      <!-- Links column 2 -->
+      <div class="footer-col">
+        <!-- 🔧 PERSONNALISABLE : ressources -->
+        <h4>Ressources</h4>
+        <ul>
+          <li><a href="#">Règlement complet</a></li>
+          <li><a href="#">Éditions précédentes</a></li>
+          <li><a href="#">Revue annuelle (PDF)</a></li>
+          <li><a href="#">Ateliers d'écriture</a></li>
+          <li><a href="#">Contact presse</a></li>
+        </ul>
+      </div>
+
+      <!-- Links column 3 -->
+      <div class="footer-col">
+        <!-- 🔧 PERSONNALISABLE : contact -->
+        <h4>Nous contacter</h4>
+        <ul>
+          <!-- 🔧 PERSONNALISABLE : adresse email -->
+          <li><a href="mailto:contact@zones-humides-concours.fr">contact@zones-humides.fr</a></li>
+          <!-- 🔧 PERSONNALISABLE : adresse postale -->
+          <li><a href="#">12 Allée des Roseaux<br>44000 Nantes</a></li>
+          <!-- 🔧 PERSONNALISABLE : téléphone -->
+          <li><a href="tel:+33200000000">02 00 00 00 00</a></li>
+        </ul>
+        <div style="margin-top:1.2rem;">
+          <span class="footer-edition">Édition 2025</span>
+        </div>
+      </div>
+    </div>
+
+    <hr class="footer-divider" />
+
+    <div class="footer-bottom">
+      <p>
+        <!-- 🔧 PERSONNALISABLE : nom de l'organisation et année -->
+        © 2025 <strong>Association Les Voix des Zones Humides</strong>.
+        Tous droits réservés.
+      </p>
+      <p class="footer-org-name">
+        <!-- 🔧 PERSONNALISABLE : mentions légales supplémentaires -->
+        Site réalisé dans le cadre du concours · <a href="#">Mentions légales</a> · <a href="#">Politique de confidentialité</a>
+      </p>
+    </div>
+  </div>
+</footer>
+
+<!-- ===== SCRIPTS ===== -->
+<script>
+  /* ── THEME TOGGLE ── */
+  function toggleTheme() {
+    const html = document.documentElement;
+    const isNight = html.getAttribute('data-theme') === 'night';
+    html.setAttribute('data-theme', isNight ? 'day' : 'night');
+    const btn = document.querySelector('.theme-toggle');
+    btn.querySelector('.theme-icon').textContent = isNight ? '🌙' : '☀️';
+    btn.querySelector('.theme-label').textContent = isNight ? 'Nuit' : 'Jour';
+  }
+
+  /* ── READ PROGRESS BAR ── */
+  window.addEventListener('scroll', () => {
+    const el = document.documentElement;
+    const scrollTop = el.scrollTop || document.body.scrollTop;
+    const scrollHeight = el.scrollHeight - el.clientHeight;
+    const pct = scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 : 0;
+    document.getElementById('read-progress').style.width = pct + '%';
+  });
+
+  /* ── SCROLL REVEAL ── */
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        // Stagger children if multiple reveals inside
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  /* ── COUNTDOWN ── */
+  function updateCountdown() {
+    // 🔧 PERSONNALISABLE : changez cette date
+    const target = new Date('2025-03-01T23:59:59');
+    const now = new Date();
+    const diff = target - now;
+    if (diff <= 0) {
+      document.getElementById('cd-days').textContent = '00';
+      document.getElementById('cd-hours').textContent = '00';
+      document.getElementById('cd-mins').textContent = '00';
+      document.getElementById('cd-secs').textContent = '00';
+      return;
+    }
+    const d = Math.floor(diff / 86400000);
+    const h = Math.floor((diff % 86400000) / 3600000);
+    const m = Math.floor((diff % 3600000) / 60000);
+    const s = Math.floor((diff % 60000) / 1000);
+    document.getElementById('cd-days').textContent  = String(d).padStart(2,'0');
+    document.getElementById('cd-hours').textContent = String(h).padStart(2,'0');
+    document.getElementById('cd-mins').textContent  = String(m).padStart(2,'0');
+    document.getElementById('cd-secs').textContent  = String(s).padStart(2,'0');
+  }
+  updateCountdown();
+  setInterval(updateCountdown, 1000);
+
+  /* ── TEXT FILTER ── */
+  function filterTexts(cat, btn) {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.text-card').forEach(card => {
+      if (cat === 'all' || card.dataset.cat === cat) {
+        card.style.display = 'flex';
+        card.style.animation = 'fadeIn 0.35s ease';
+      } else {
+        card.style.display = 'none';
+      }
+    });
+  }
+
+  /* ── READ MORE TOGGLE ── */
+  function toggleCard(btn) {
+    const card = btn.closest('.text-card');
+    const excerpt = card.querySelector('.card-excerpt');
+    const full = card.querySelector('.card-full-text');
+    const isOpen = full.style.display === 'block';
+    full.style.display = isOpen ? 'none' : 'block';
+    excerpt.style.display = isOpen ? 'block' : 'none';
+    btn.textContent = isOpen ? 'Lire la suite →' : '← Réduire';
+    btn.setAttribute('aria-expanded', String(!isOpen));
+  }
+
+  /* ── LIKE BUTTON ── */
+  function toggleLike(btn) {
+    const countEl = btn.querySelector('span');
+    const isLiked = btn.classList.contains('liked');
+    btn.classList.toggle('liked');
+    btn.querySelector(':first-child') // heart icon via textNode
+    const count = parseInt(countEl.textContent);
+    countEl.textContent = isLiked ? count - 1 : count + 1;
+    btn.innerHTML = (isLiked ? '♡ ' : '♥ ') + '<span>' + (isLiked ? count - 1 : count + 1) + '</span>';
+    if (!isLiked) btn.classList.add('liked');
+    else btn.classList.remove('liked');
+  }
+
+  /* ── FORM SUBMIT ── */
+  function submitForm() {
+    const prenom = document.getElementById('f-prenom').value.trim();
+    const email  = document.getElementById('f-email').value.trim();
+    const titre  = document.getElementById('f-titre').value.trim();
+    const texte  = document.getElementById('f-texte').value.trim();
+    if (!prenom || !email || !titre || !texte) {
+      showToast('⚠️ Merci de remplir tous les champs obligatoires.');
+      return;
+    }
+    showToast('✅ Votre texte a bien été soumis ! Nous reviendrons vers vous par e-mail.');
+  }
+
+  /* ── TOAST ── */
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 4000);
+  }
+
+  /* ── MOBILE MENU ── */
+  function toggleMobileMenu() {
+    const links = document.querySelector('.nav-links');
+    const isOpen = links.style.display === 'flex';
+    if (isOpen) {
+      links.style.display = 'none';
+    } else {
+      links.style.cssText = `
+        display: flex; flex-direction: column; position: fixed;
+        top: 68px; left: 0; right: 0;
+        background: var(--nav-bg); backdrop-filter: blur(12px);
+        padding: 1.5rem 2rem 2rem; gap: 1.2rem; z-index: 99;
+        border-bottom: 1px solid var(--border);
+      `;
+    }
+  }
+
+  /* ── CLOSE mobile menu on link click ── */
+  document.querySelectorAll('.nav-links a').forEach(a => {
+    a.addEventListener('click', () => {
+      document.querySelector('.nav-links').style.display = 'none';
+    });
+  });
+
+  /* ── Keyframe for text card fade in ── */
+  const style = document.createElement('style');
+  style.textContent = '@keyframes fadeIn { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:none; } }';
+  document.head.appendChild(style);
+</script>
+</body>
+</html>
