@@ -384,14 +384,6 @@
       font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase;
       color: var(--reed); font-weight: 500; margin-top: 2px;
     }
-    .card-likes {
-      display: flex; align-items: center; gap: 5px;
-      font-size: 0.78rem; color: var(--text-muted);
-      cursor: pointer; transition: color 0.2s;
-      background: none; border: none;
-    }
-    .card-likes:hover { color: var(--rust); }
-    .card-likes.liked { color: var(--rust); }
     .card-body { padding: 1.4rem 1.8rem; flex: 1; }
     .card-title {
       font-family: 'Playfair Display', serif;
@@ -570,8 +562,8 @@
   <div class="bubble" style="width:140px;height:140px;top:70%;left:15%;animation-duration:14s;animation-delay:-6s;"></div>
 </div>
 
-<!-- Dragonfly decoration -->
-<div class="dragonfly" style="top:18%;left:82%" aria-hidden="true">🦟</div>
+<!-- Butterfly decoration -->
+<div class="dragonfly" style="top:18%;left:82%" aria-hidden="true">🦋</div>
 
 <!-- Progress bar -->
 <div id="read-progress" role="progressbar" aria-hidden="true"></div>
@@ -579,13 +571,12 @@
 <!-- ===== NAV ===== -->
 <nav role="navigation" aria-label="Navigation principale">
   <div class="nav-logo">
-    <!-- 🔧 PERSONNALISABLE : remplacez le src par votre propre logo -->
     <img src="http://www.image-heberg.fr/files/1776272565489044477.png"
          alt="Logo du concours" onerror="this.style.display='none'" />
     <div class="nav-title">
       <!-- 🔧 PERSONNALISABLE : nom du concours -->
-      Zones Humides
-      <small>Concours de Textes 2025</small>
+      Horizon Oiseaux : Cap sur les Zones Humides
+      <small>Concours de Textes 2027</small>
     </div>
   </div>
   <ul class="nav-links">
@@ -606,12 +597,11 @@
   <div class="hero-bg" aria-hidden="true"></div>
   <div class="hero-content reveal">
     <!-- 🔧 PERSONNALISABLE : bandeau thématique -->
-    <div class="hero-eyebrow">✦ Concours National · Édition 2025 ✦</div>
+    <div class="hero-eyebrow">✦ Journée mondiale zones humides · 2 février ✦</div>
     <h1>Les <em>Voix</em> des<br>Zones Humides</h1>
     <p class="hero-sub">
-      <!-- 🔧 PERSONNALISABLE : sous-titre hero -->
-      Un concours d'écriture pour célébrer tourbières, marais, étangs et mangroves —
-      ces espaces vivants qui murmurent entre deux mondes.
+      Un concours d'écriture pour célébrer tourbières, marais, étangs et mangroves,
+      organisé dans le cadre du projet Horizon Oiseaux !
     </p>
     <div class="hero-cta">
       <a href="#textes"><button class="btn-primary">Lire les textes</button></a>
@@ -632,25 +622,20 @@
     </div>
     <div class="about-text">
       <div class="section-label">Le Concours</div>
-      <!-- 🔧 PERSONNALISABLE : titre section -->
-      <h2 class="section-heading reveal">Écrire pour les terres d'entre-deux</h2>
-      <!-- 🔧 PERSONNALISABLE : texte de présentation -->
+      <h2 class="section-heading reveal">Écrire pour découvrir</h2>
       <p class="reveal">
-        Les zones humides couvrent à peine 6 % de la surface terrestre, mais abritent plus d'un tiers
-        de toutes les espèces connues. Ce concours d'écriture invite à plonger dans ces écosystèmes
-        fragiles et extraordinaires.
+        Les zones humides couvrent à peine 6 % de la surface terrestre. Pourtant, elles abritent plus d'un tiers
+        de toutes les espèces connues. Horizon Oiseaux vous invite à plonger au cœur de cet écosystème méconnu...
       </p>
       <p class="reveal">
-        Vous trouverez ci-dessous l'ensemble des textes reçus pour cette édition, présentés tels
+        Vous trouverez ci-dessous l'ensemble des textes reçus à l'occasion de ce concours, tels
         qu'ils ont été soumis par leurs auteurs et autrices.
       </p>
-      <!-- 🔧 PERSONNALISABLE : mots-clés thématiques -->
       <div class="feature-pills reveal">
         <span class="pill">🌿 Poésie</span>
         <span class="pill">📖 Nouvelle</span>
         <span class="pill">✍️ Essai</span>
-        <span class="pill">🌊 Marais</span>
-        <span class="pill">🌱 Résilience</span>
+        <span class="pill">🌊 Histoire</span>
       </div>
     </div>
   </div>
@@ -662,23 +647,19 @@
     <div class="section-label">Les Textes</div>
     <h2 class="section-heading reveal">Œuvres présentées</h2>
     <p class="section-intro reveal">
-      Parcourez les textes ci-dessous. Cliquez sur « Lire la suite » pour afficher le texte complet.
+      Vous pouvez parcourir les textes suivants. Cliquez sur « Lire la suite » pour les afficher en complet.
     </p>
 
     <div class="texts-grid" id="texts-grid">
 
       <!-- ===== CARD 1 ===== -->
-      <!-- 🔧 PERSONNALISABLE : tous les champs de cette carte -->
       <article class="text-card reveal">
         <div class="card-header">
           <div class="card-avatar">M</div>
           <div class="card-meta">
-            <div class="card-author">Marie Fontaine</div>
+            <div class="card-author"></div>
             <div class="card-category">Poésie</div>
           </div>
-          <button class="card-likes" onclick="toggleLike(this)" aria-label="Aimer ce texte">
-            ♡ <span>47</span>
-          </button>
         </div>
         <div class="card-body">
           <h3 class="card-title">Le Héron de la Mare aux Joncs</h3>
@@ -712,9 +693,6 @@ est la seule forme d'intelligence du monde.</p>
             <div class="card-author">Thomas Brasseur</div>
             <div class="card-category">Nouvelle</div>
           </div>
-          <button class="card-likes" onclick="toggleLike(this)" aria-label="Aimer ce texte">
-            ♡ <span>31</span>
-          </button>
         </div>
         <div class="card-body">
           <h3 class="card-title">La Tourbière de Grand-Mère</h3>
@@ -749,9 +727,6 @@ Elle rejoignait simplement le récit du marais.</p>
             <div class="card-author">Sofia Nagler</div>
             <div class="card-category">Essai</div>
           </div>
-          <button class="card-likes" onclick="toggleLike(this)" aria-label="Aimer ce texte">
-            ♡ <span>58</span>
-          </button>
         </div>
         <div class="card-body">
           <h3 class="card-title">Quand les marais parlent, personne n'écoute</h3>
@@ -786,9 +761,6 @@ que les lieux qu'ils désignaient.</p>
             <div class="card-author">Léo Vasquez</div>
             <div class="card-category">Poésie</div>
           </div>
-          <button class="card-likes" onclick="toggleLike(this)" aria-label="Aimer ce texte">
-            ♡ <span>22</span>
-          </button>
         </div>
         <div class="card-body">
           <h3 class="card-title">Grenouilles, minuit</h3>
@@ -823,9 +795,6 @@ pour tenir jusqu'à l'aube.</p>
             <div class="card-author">Amira Ben Soltane</div>
             <div class="card-category">Nouvelle</div>
           </div>
-          <button class="card-likes" onclick="toggleLike(this)" aria-label="Aimer ce texte">
-            ♡ <span>44</span>
-          </button>
         </div>
         <div class="card-body">
           <h3 class="card-title">L'Embouchure</h3>
@@ -860,10 +829,7 @@ Le marais nous apprenait le partage sans rien nous demander en échange.</p>
             <div class="card-author">Robin Cauchard</div>
             <div class="card-category">Essai</div>
           </div>
-          <button class="card-likes" onclick="toggleLike(this)" aria-label="Aimer ce texte">
-            ♡ <span>19</span>
-          </button>
-        </div>
+         </div>
         <div class="card-body">
           <h3 class="card-title">L'Eau qui reste</h3>
           <p class="card-excerpt">Face au dérèglement climatique, on parle de barrages, de retenues,
@@ -897,7 +863,6 @@ La prochaine fois que vous verrez un marais, pensez à lui comme
 <section class="poem-section">
   <div class="poem-inner">
     <div class="poem-icon">🌿</div>
-    <!-- 🔧 PERSONNALISABLE : extrait mis en avant -->
     <blockquote class="featured-poem reveal">
       <p>Les zones humides ne sont pas des terres perdues,</p>
       <p>ni des espaces sans nom entre deux endroits.</p>
@@ -920,25 +885,21 @@ La prochaine fois que vous verrez un marais, pensez à lui comme
     <div class="footer-grid">
       <!-- Brand column -->
       <div class="footer-brand">
-        <!-- 🔧 PERSONNALISABLE : logo footer -->
         <img src="http://www.image-heberg.fr/files/1776272565489044477.png"
              alt="Logo" onerror="this.style.display='none'" />
-        <!-- 🔧 PERSONNALISABLE : description footer -->
         <p>
-          Un concours d'écriture qui donne une voix aux zones humides de France et du monde.
-          Parce que les mots, eux aussi, peuvent être des habitats.
+          Un concours pour faire connaître et protéger les zones humides.
+          Organisé par Horizon Oiseaux.
         </p>
         <div class="footer-social">
-          <!-- 🔧 PERSONNALISABLE : liens réseaux sociaux -->
-          <a href="#" class="social-btn" aria-label="Facebook" title="Facebook">𝔽</a>
-          <a href="#" class="social-btn" aria-label="Instagram" title="Instagram">📷</a>
-          <a href="#" class="social-btn" aria-label="Twitter/X" title="Twitter">𝕏</a>
+          <a href="https://discord.gg/xv7z3aA7E" class="social-btn" aria-label="Discord" title="Discord">🎮</a>
+          <a href="https://www.youtube.com/@Horizon.Oiseaux" class="social-btn" aria-label="YouTube" title="YouTube">▶️</a>
+          <a href="horizonoiseaux.onrender.com" class="social-btn" aria-label="Notre site" title="Notre site">🐦</a>
         </div>
       </div>
 
       <!-- Links column -->
       <div class="footer-col">
-        <!-- 🔧 PERSONNALISABLE : liens de navigation footer -->
         <h4>Navigation</h4>
         <ul>
           <li><a href="#presentation">Présentation</a></li>
@@ -951,13 +912,9 @@ La prochaine fois que vous verrez un marais, pensez à lui comme
 
       <!-- Contact column -->
       <div class="footer-col">
-        <!-- 🔧 PERSONNALISABLE : contact -->
         <h4>Nous contacter</h4>
         <ul>
-          <!-- 🔧 PERSONNALISABLE : adresse email -->
-          <li><a href="mailto:contact@zones-humides.fr">contact@zones-humides.fr</a></li>
-          <!-- 🔧 PERSONNALISABLE : adresse postale -->
-          <li><a href="#">12 Allée des Roseaux<br>44000 Nantes</a></li>
+          <li><a href="mailto:horizon.oiseaux@proton.me">horizon.oiseaux@proton.me</a></li>
         </ul>
       </div>
     </div>
@@ -966,13 +923,8 @@ La prochaine fois que vous verrez un marais, pensez à lui comme
 
     <div class="footer-bottom">
       <p>
-        <!-- 🔧 PERSONNALISABLE : nom de l'organisation et année -->
-        © 2025 <strong>Association Les Voix des Zones Humides</strong>.
+        © 2027 <strong>Horizon Oiseaux</strong>.
         Tous droits réservés.
-      </p>
-      <p>
-        <!-- 🔧 PERSONNALISABLE : mentions légales supplémentaires -->
-        <a href="#">Mentions légales</a> · <a href="#">Politique de confidentialité</a>
       </p>
     </div>
   </div>
@@ -1022,16 +974,6 @@ La prochaine fois que vous verrez un marais, pensez à lui comme
     excerpt.style.display = isOpen ? 'block' : 'none';
     btn.textContent = isOpen ? 'Lire la suite →' : '← Réduire';
     btn.setAttribute('aria-expanded', String(!isOpen));
-  }
-
-  /* ── LIKE BUTTON ── */
-  function toggleLike(btn) {
-    const countEl = btn.querySelector('span');
-    const isLiked = btn.classList.contains('liked');
-    const count = parseInt(countEl.textContent);
-    const newCount = isLiked ? count - 1 : count + 1;
-    btn.innerHTML = (isLiked ? '♡ ' : '♥ ') + '<span>' + newCount + '</span>';
-    btn.classList.toggle('liked', !isLiked);
   }
 
   /* ── MOBILE MENU ── */
